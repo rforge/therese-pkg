@@ -1,0 +1,17 @@
+## exports
+# standard functions
+export(set.options)
+export(build.therese)
+export(therese2igraph)
+
+# thereseOptions S3 functions
+S3method(print,thereseOptions)
+
+# therese S3 functions
+S3method(print,therese)
+S3method(summary,therese)
+
+# thereseNet S3 functions
+S3method(print,thereseNet)
+S3method(summary,thereseNet)
+S3method(plot,thereseNet)

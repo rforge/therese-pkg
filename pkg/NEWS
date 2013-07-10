@@ -1,0 +1,6 @@
+therese - v0.1
+  The initial version of therese package.
+  It contains:
+    * a function to infer network from multiple samples
+    * a function to create igraph objects from these results
+  Warning: This version does not deal well with unbalanced conditions. Proper condition weights will be added soon.

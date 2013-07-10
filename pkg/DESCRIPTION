@@ -1,0 +1,12 @@
+Package: therese
+Type: Package
+Title: Multiple Network Inference by therese
+Version: 0.1
+Date: 2013-07-09
+Authors@R: c(person("Nicolas","Edwards",role="ctb", email="nicolas.ae@free.fr"),
+             person("Nathalie", "Villa-Vialaneix", role = c("aut", "cre"), email="nathalie.villa@univ-paris1.fr"))
+Maintainer: Nathalie Villa-Vialaneix <nathalie@nathalievilla.org>
+Description: This package is another package for multiple network inference. It uses a consensus Lasso inference method
+Depends: igraph (>= 0.6)
+License: GPL (>= 2)
+Repository: R-Forge

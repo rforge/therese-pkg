@@ -1,0 +1,30 @@
+citHeader("To cite the 'therese' package in publications use:")
+
+year = sub('.*(2[[:digit:]]{3})-.*', '\\1', meta$Date, perl = TRUE)
+vers = paste('R package version', meta$Version)
+
+citEntry(
+  entry = 'manual',
+  title = paste('therese:', meta$Title),
+  author = as.person(meta$Author),
+  year = year,
+  note = vers,
+  url = meta$URL,
+  textVersion = paste('Nathalie Villa-Vialaneix, et al. (', year, ') therese: ', meta$Title, '. ', vers, '.', sep = '')
+)
+
+citEntry(
+  entry = 'inProceedings',
+  title = 'Consensus LASSO : inference conjointe de reseaux de genes dans des conditions experimentales multiples',
+  author = personList(as.person("Nathalie Villa-Vialaneix"),as.person("Magali San Cristobal")),
+  booktitle = 'Proceedings of: 45e Journees de Statistique',
+  address = 'Toulouse, France',
+  year = 2013,
+  pages = '40',
+  url = 'http://papersjds13.sfds.asso.fr/submission_13.pdf',
+
+  textVersion = paste('Villa-Vialaneix N., San Cristobal M. (2013)',
+                      'Consensus LASSO : inference conjointe de reseaux de genes dans des conditions experimentales multiples.',
+                      'Proceedings of: 45e Journees de Statistique, Toulouse, France, May 27-31, 40.',
+                      'URL http://papersjds13.sfds.asso.fr/submission_13.pdf.')
+)
