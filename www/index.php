@@ -39,7 +39,7 @@ while (!feof($handle)) {
 	$contents .= fread($handle, 8192);
 }
 fclose($handle);
-echo $contents.'<a href="#therese">(*)</a>'; } ?>
+echo '<img src="therese.png" border="0" alt="therese logo" width="128"> '.$contents.'<sup>(<a href="#reftherese">1</a>,<a href="#logotherese">2</a>)</sup>'; } ?>
 
 <!-- end of project description -->
 
@@ -50,6 +50,7 @@ echo $contents.'<a href="#therese">(*)</a>'; } ?>
 
 <br>
 <br>
-<a name="therese"><p style="font-size:small">(*) "therese" stands for: "Trust the Holy Estimation of Regulatory nEtworks from Several Expression data"<p></a>
+<a name="reftherese"><p style="font-size:small"><sup>(1)</sup> "therese" stands for: "Trust the Holy Estimation of Regulatory nEtworks from Several Expression data"<p></a>
+<a name="logotherese"><p style="font-size:small"><sup>(2)</sup> The logo was kindly drawn by <a href="https://docs.google.com/file/d/0BxNYmPPxXLUzMmFheG1EN2hHY3M/edit?usp=sharing">PEV</a> (Pierre-Vincent Vrot, student in Computer Science and Robotics).<p></a>
 </body>
 </html>
