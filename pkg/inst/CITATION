@@ -14,6 +14,23 @@ citEntry(
 )
 
 citEntry(
+  entry = 'article',
+  title = 'Inferring networks from multiple samples with consensus LASSO',
+  author = personList(as.person("Nathalie Villa-Vialaneix"),
+                      as.person("Matthieu Vignes"),
+                      as.person("Nathalie Viguerie"),
+                      as.person("Magali San Cristobal")),
+  journal = 'Quality Technology and Quantitative Management',
+  year = 2013,
+  volume = 11,
+  number = 1,
+  pages = '39-60',
+  textVersion = paste('Villa-Vialaneix N., Vignes M., Viguerie N., San Cristobal M. (2014)',
+                      'Inferring networks from multiple samples with consensus LASSO.',
+                      'Quality Technology and Quantitative Management, 11(1), 39-60.')
+)
+
+citEntry(
   entry = 'inProceedings',
   title = 'Consensus LASSO : inference conjointe de reseaux de genes dans des conditions experimentales multiples',
   author = personList(as.person("Nathalie Villa-Vialaneix"),as.person("Magali San Cristobal")),

@@ -110,12 +110,25 @@ infer.edges <- function(X, tasks, penalty, options) {
 	Ulig <- Reduce(cbind,U)
 	U <- NULL
 	for (t in 1:T) U <- rbind(U,Ulig)
-	A <- U
-	for (t in 1:T) {
-	  current.block <- ((t-1)*(p-1)+1):(t*(p-1))
-	  A[current.block,current.block] <- diag(1,p-1)+A[current.block,current.block]
-	  A[current.block,] <- A[current.block,] * sqrt(nt[t])
+	# define matrix 'A' (averaged consensus)
+	if (options$ctype=="average") {
+	  A <- U
+	  for (t in 1:T) {
+	    current.block <- ((t-1)*(p-1)+1):(t*(p-1))
+	    A[current.block,current.block] <- diag(1,p-1)+A[current.block,current.block]
+	    A[current.block,] <- A[current.block,] * sqrt(nt[t])
+	  }
+	}  
+	if (options$ctype=="fixed") {
+	  clean.fixed <- matrix(options$fixed.cons[lower.tri(options$fixed.cons)|
+                                               upper.tri(options$fixed.cons)],
+	                        nrow=nrow(options$fixed.cons)-1)
+	  priorB <- NULL
+	  for (t in 1:T) {
+	    priorB <- rbind(priorB,clean.fixed)
+	  }
 	}
+  
 	if (is.null(options$initial.guess)) {
 	  Beta <- matrix(0,(p-1)*T, p)
 	} else Beta <- options$initial.guess
@@ -133,12 +146,20 @@ infer.edges <- function(X, tasks, penalty, options) {
 	    C.11[current.block,current.block] <- S.t[[t]][-k,-k]
 	    C.12 <- cbind(c(C.12,S.t[[t]][-k,k]))      
 	  }
-	  C.11 <- C.11 + options$mu^2 * t(A)%*%A
-	  
-    ## Function that performs the inference for one variable
-	  results <- cLasso(C.11, C.12, Lambda, T, beta=Beta[,k], max.size=min(n,p*T),
-                      max.it=options$max.it)
     
+	  if (options$ctype=="average") {
+	    C.11 <- C.11 + options$mu^2 * t(A)%*%A
+	  } else if (options$ctype=="fixed") {
+      C.11 <- C.11 + options$mu^2*diag(rep(1,(p-1)*T))
+	  }
+	  
+	  if (options$ctype=="fixed")
+	    C.12 <- C.12-options$mu^2*priorB[,k]
+	  
+	  ## Function that performs the inference for one variable
+	  results <- cLasso(C.11, C.12, Lambda, T, beta=Beta[,k], max.size=min(n,p*T),
+	                    max.it=options$max.it)
+        
 	  if (results$converged) {
 	    Beta[,k] <- results$beta
 	  } else  {

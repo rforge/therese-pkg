@@ -8,6 +8,13 @@ build.therese <- function(expr, conditions, ...) {
   args <- list(...)
   options <- do.call("set.options",args)
   
+  # check consensus in case it is fixed
+  if ((options$ctype=="fixed")&&
+        ((nrow(options$fixed.cons)!=ncol(expr))|
+           (ncol(options$fixed.cons)!=ncol(expr)))) {
+    stop("Unadequate 'fixed.cons'!! Dimensions do not fit those of 'expr'.")
+  }
+  
 	# Centering (always) and normalizing if required (TRUE by default)
   if (!is.factor(conditions)) conditions <- factor(conditions)
 	X <- Reduce(rbind,by(expr,conditions,scale.default,TRUE,options$scale))

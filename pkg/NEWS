@@ -1,6 +1,16 @@
+therese - v0.2
+  An improved version of therese package that allows the use of a fixed 
+knowledge. Bibliographic prior knowledge can be included in the inferrence 
+using this new option
+  The new version also contains updated references
+  Warning: This version still does not deal well with unbalanced conditions.
+Proper condition weights will be added soon.
+
+
 therese - v0.1
   The initial version of therese package.
   It contains:
     * a function to infer network from multiple samples
     * a function to create igraph objects from these results
-  Warning: This version does not deal well with unbalanced conditions. Proper condition weights will be added soon.
+  Warning: This version does not deal well with unbalanced conditions. Proper
+condition weights will be added soon.

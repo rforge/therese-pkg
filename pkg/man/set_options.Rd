@@ -10,12 +10,16 @@ This function designs low-level options for therese by setting up various
 parameters of the underlying algorithm.
 }
 \usage{
-set.options(scale=TRUE, verbose=TRUE, mu=NULL, penalties=NULL, penalty.min=0.01,
+set.options(ctype=c("average","fixed"), scale=TRUE, verbose=TRUE, mu=NULL,
+            fixed.cons=NULL, penalties=NULL, penalty.min=0.01,
             penalty.max=NULL, n.penalties=100, edges.max=Inf,
             symmetrization=c("AND","OR"), initial.guess=NULL, max.it=NULL)
 \method{print}{thereseOptions}(x, \ldots)
 }
 \arguments{
+  \item{ctype}{one of \option{"average"} and \option{"fixed"}, indicated whether
+  the "average" consensus or a fixed consensus should be used. See
+  Villa-Vialaneix et al., 2013 for further details.}
   \item{scale}{logical specifying wether the data should be normalized to unit
 variance. The normalization is made task-wisely. Default is \option{TRUE}.
 }
@@ -25,6 +29,9 @@ progression. Default is \option{TRUE}.
 	\item{mu}{a numeric value penalty for the \eqn{L2}{L^2} consensus penalty. If
 \code{NULL} (the default), a realistic value is proposed to the user.
 }
+  \item{fixed.cons}{a fixed consensus matrix with numeric values that must be
+  supplied when \option{ctype=="fixed"}. This matrix has the same dimensions
+  than \option{expr} in the function call \code{\link{build.therese}}.}
   \item{penalties}{a vector of penalties \eqn{lambda}{\lambda} for the network
 estimation. These will be used in decreasing order. If \option{NULL} (the
 default), an appropriate vector will be generated with \option{n.penalties}
@@ -49,7 +56,7 @@ select: if a network is inferred along the path of \eqn{lambda}{\lambda} values
 that has a number of edges larger than \option{edges.max}, the algorithm will 
 be stopped. Default is \option{Inf}.
 }
-	\item{initial.guess}{a matrix of the initial guess for the coefficient in the
+	\item{initial.guess}{a matrix of the initial guess for the coefficients in the
 regression. Its dimensions must be equal to \eqn{(p-1)*cond}{%
 (p-1)\times \textrm{cond}} where\eqn{p}{p} is the number of variables (genes)
 and \eqn{cond}{\textrm{cond}} is the number of conditions.Default is
@@ -70,6 +77,11 @@ abovementionned elements.
 }
 \author{
 Nathalie Villa-Vialaneix <nathalie.villa@univ-paris1.fr>
+}
+\references{
+Villa-Vialaneix N., Vignes M., Viguerie N., San Cristobal M. (2014) Inferring
+networks from multiple samples with consensus LASSO. \emph{Quality Technology
+and Quantitative Management}, \bold{11}(1), 39--60.
 }
 \seealso{
 \code{\link{build.therese}}

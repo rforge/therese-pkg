@@ -64,10 +64,9 @@ of \eqn{lambda}{\lambda}.}
 Nathalie Villa-Vialaneix <nathalie.villa@univ-paris1.fr>
 }
 \references{
-Villa-Vialaneix N., San Cristobal M. (2013) Consensus LASSO : inference
-conjointe de reseaux de genes dans des conditions experimentales multiples.
-In Proceedings of: \emph{45e Journees de Statistique}, Toulouse, France, May,
-27-31, p.40. \url{http://papersjds13.sfds.asso.fr/submission_13.pdf}.
+Villa-Vialaneix N., Vignes M., Viguerie N., San Cristobal M. (2014) Inferring
+networks from multiple samples with consensus LASSO. \emph{Quality Technology
+and Quantitative Management}, \bold{11}(1), 39--60.
 }
 \seealso{
 \code{\link{set.options}}, \code{\link{therese2igraph}}

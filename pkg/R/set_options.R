@@ -1,16 +1,28 @@
 ##### Handling options
 
-set.options <- function(scale=TRUE, verbose=TRUE, mu=NULL, penalties=NULL,
+set.options <- function(ctype=c("average","fixed"), scale=TRUE, verbose=TRUE,
+                        mu=NULL, fixed.cons=NULL, penalties=NULL,
                         penalty.min=1e-2, penalty.max=NULL, n.penalties=100,
                         edges.max=Inf, symmetrization=c("AND","OR"),
                         initial.guess=NULL, max.it=NULL) {
   
   ## TODO: add tests to check if the options are consistant
   ## TODO: add weight.task
+  ctype <- match.arg(ctype)
+  
   if (!is.null(penalties)) penalties <- sort(penalties, decreasing=TRUE)
   penalty.min <- max(penalty.min,.Machine$double.eps)
+  
+  if ((ctype=="average")&(!is.null(fixed.cons))) {
+    ctype <- "fixed"
+    warning("'ctype' switched to 'fixed' as 'fixed.cons' is not null!")
+  }
 
-	all.options <- list(scale=scale, verbose=verbose, mu=mu, penalties=penalties,
+  if ((ctype=="fixed")&(is.null(fixed.cons)))
+    stop("When 'ctype==fixed', 'fixed.cons' must be supplied!")
+      
+	all.options <- list(ctype=ctype, scale=scale, verbose=verbose, mu=mu,
+                      fixed.cons=fixed.cons, penalties=penalties,
                       penalty.min=penalty.min, penalty.max=penalty.max,
                       n.penalties=n.penalties,
                       symmetrization=match.arg(symmetrization),
@@ -29,6 +41,7 @@ set.options <- function(scale=TRUE, verbose=TRUE, mu=NULL, penalties=NULL,
 
 print.thereseOptions <- function(x,...) {
   cat("\n***** Parameters for therese\n\n")
+  cat("    consensus type                 :", x$ctype, "\n")
   cat("    scaling                        : ", x$scale, "\n")
   if (!is.null(x$mu))
     cat("    mu                             : ", x$mu, "\n")
