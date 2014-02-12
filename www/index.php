@@ -43,7 +43,7 @@ echo '<img src="therese.png" border="0" alt="therese logo" width="128"> '.$conte
 
 <!-- end of project description -->
 
-<p><em>Reference:</em> Villa-Vialaneix N., Vignes M., Viguerie N., San Cristobal M. (2014) Inferring networks from multiple samples with consensus LASSO. <a href="http://web.it.nctu.edu.tw/qtqm/"><em>Quality Technology &amp; Quantitative Management</a>, <b>11</b>(1), 39-60.</p>
+<p><em>Reference:</em> Villa-Vialaneix N., Vignes M., Viguerie N., San Cristobal M. (2014) Inferring networks from multiple samples with consensus LASSO. <a href="http://web.it.nctu.edu.tw/qtqm/"><em>Quality Technology &amp; Quantitative Management</em></a>, <b>11</b>(1), 39-60.</p>
 
 <p>The <strong>project summary page</strong> is <a href="http://<?php echo $domain; ?>/projects/<?php echo $group_name; ?>/"><strong>here</strong></a> and the package can be downloaded <a href="https://r-forge.r-project.org/R/?group_id=1714"><strong>here</strong></a>.</p>
 
