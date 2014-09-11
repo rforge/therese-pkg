@@ -1,12 +1,11 @@
 Package: therese
 Type: Package
 Title: Multiple Network Inference by therese
-Version: 0.2
-Date: 2013-10-17
+Version: 0.3
+Date: 2014-09-11
 Authors@R: c(person("Nicolas","Edwards",role="ctb", email="nicolas.ae@free.fr"),
-             person("Nathalie", "Villa-Vialaneix", role = c("aut", "cre"), email="nathalie.villa@univ-paris1.fr"))
-Author: Nathalie Villa-Vialaneix
-Maintainer: Nathalie Villa-Vialaneix <nathalie@nathalievilla.org>
+             person("Nathalie", "Villa-Vialaneix", role = c("aut", "cre"), email="nathalie.villa@toulouse.inra.fr"))
+Maintainer: Nathalie Villa-Vialaneix <nathalie.villa@toulouse.inra.fr>
 Description: This package is another package for multiple network inference. It uses a consensus Lasso inference method
 Depends: igraph (>= 0.6)
 License: GPL (>= 2)

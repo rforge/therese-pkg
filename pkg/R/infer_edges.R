@@ -137,7 +137,6 @@ infer.edges <- function(X, tasks, penalty, options) {
 	
 	# Variable loop: build one LM for each variable
 	for (k in 1:p) {
-
 	  Lambda <- cbind(rep(Rho[-k,k],T)*rep(max(nt)/nt,rep(p-1,T)))
 	  C.11 <- matrix(0,(p-1)*T,(p-1)*T)
 	  C.12 <- NULL
@@ -167,68 +166,73 @@ infer.edges <- function(X, tasks, penalty, options) {
 	    return(list(Theta=NA, Beta=NA, n.edges=NA, loglik=NA, loglik.pen=NA,
                   BIC=NA, AIC=NA))
 	  }
-    
-	  # Gathering all outputs together
-	  Theta     <- list()
-	  Theta.and <- list()
-	  Theta.or  <- list()
-	  loglik    <- 0
-	  loglik.pen <- 0
-	  total.df       <- 0
-	  AIC       <- 0
-	  
-	  # Calculate consensus
-	  cons.beta <- matrix(0,ncol=p,nrow=p-1)
-	  for (t in 1:T) {
-	    indices <- ((t-1)*(p-1)+1):(t*(p-1))
-	    cons.beta <- cons.beta + nt[t]/n*Beta[indices,]
-	  }
-	  
-	  # Build parameters list for every task
-	  for (t in 1:T) {
-	    Theta.c <- matrix(0,p,p)
-	    dimnames(Theta.c) <- list(colnames(X), colnames(X))
-	    
-	    indices <- ((t-1)*(p-1)+1):(t*(p-1))
-	    for (k in 1:p) {
-	      Theta.c[k,k]  <- 1/(S.t[[t]][k,k])
-	      Theta.c[-k,k] <- Beta[indices,k] * Theta.c[k,k] 
-	    }
-	    D  <- diag(Theta.c)
-	    Theta.tilde <- Theta.c %*% diag(D^(-1/2))
-	    loglik.c <- (nt[t]/2)*(log(prod(D)) - 
-	                             sum(t(Theta.tilde) %*% var(X)%*%Theta.tilde))
-	    loglik.pen.c <- loglik.c - sum(abs(Rho * Theta.c)) - options$mu/n*
-        sum(sweep((Beta[indices,]-cons.beta)^2,2,diag(S.t[[t]]),"/"))
-	    df.c <- (sum(abs(Theta.c)>0)- sum(abs(D)>0))/2
-	    AIC.c <- -2*loglik.c + 2*df.c
-	    loglik <- loglik + loglik.c
-	    loglik.pen <- loglik.pen +  loglik.pen.c
-	    total.df <- total.df + df.c
-	    AIC <- AIC + AIC.c
-	    Theta[[t]] <- Theta.c
-	    
-	    # Post-symetrization with the AND/OR rules
-	    Theta.and[[t]] <- sign(Theta.c) * pmin(abs(Theta.c),t(abs(Theta.c)))
-	    Theta.or[[t]] <- pmax(Theta.c,t(Theta.c)) - pmax(-Theta.c,-t(Theta.c))
-	    diag(Theta.or[[t]]) <- diag(Theta.or[[t]])/2
-	  }
-	  BIC <- -2*loglik + total.df * log(n)
-	  
-    if (options$symmetrization=="AND") {
-	    Theta <- Theta.and
-    } else Theta <- Theta.or
-	  
-	  # Get the number of edges inferred
-	  n.edges <- sapply(Theta,nb.edges)
-    partial.cor <- list()
-    for (indt in 1:length(Theta)) {
-	    partial.cor[[indt]] <- - sweep(sweep(Theta[[indt]], 1,
-                                           sqrt(diag(Theta[[indt]])), "/"), 2,
-                                     sqrt(diag(Theta[[indt]])), "/")
-      diag(partial.cor[[indt]]) <- 1
-    }
 	}
+    
+  # Gathering all outputs together
+  Theta       <- list()
+  Theta.and   <- list()
+  Theta.or    <- list()
+  loglik      <- 0
+  loglik.pen  <- 0
+  total.df    <- 0
+  AIC         <- 0
+  
+  # Calculate consensus
+  cons.beta <- matrix(0,ncol=p,nrow=p-1)
+  for (t in 1:T) {
+    indices <- ((t-1)*(p-1)+1):(t*(p-1))
+    if (options$ctype=="fixed") {
+      cons.beta <- matrix(options$fixed.cons[lower.tri(options$fixed.cons)|
+                                               upper.tri(options$fixed.cons)],
+                          nrow=nrow(options$fixed.cons)-1)
+    } else cons.beta <- cons.beta + nt[t]/n*Beta[indices,]
+  }
+  
+  # Build parameters list for every task
+  for (t in 1:T) {
+    Theta.c <- matrix(0,p,p)
+    dimnames(Theta.c) <- list(colnames(X), colnames(X))
+    
+    indices <- ((t-1)*(p-1)+1):(t*(p-1))
+    for (k in 1:p) {
+      Theta.c[k,k]  <- 1/(S.t[[t]][k,k])
+      Theta.c[-k,k] <- Beta[indices,k] * Theta.c[k,k] 
+    }
+    D  <- diag(Theta.c)
+    Theta.tilde <- Theta.c %*% diag(D^(-1/2))
+    loglik.c <- (nt[t]/2)*(log(prod(D)) - 
+                             sum(t(Theta.tilde) %*% var(X)%*%Theta.tilde))
+    loglik.pen.c <- loglik.c - sum(abs(Rho * Theta.c)) - options$mu^2/n*
+      sum(sweep((Beta[indices,]-cons.beta)^2,2,diag(S.t[[t]]),"/"))
+    df.c <- (sum(abs(Theta.c)>0)- sum(abs(D)>0))/2
+    AIC.c <- -2*loglik.c + 2*df.c
+    loglik <- loglik + loglik.c
+    loglik.pen <- loglik.pen +  loglik.pen.c
+    total.df <- total.df + df.c
+    AIC <- AIC + AIC.c
+    Theta[[t]] <- Theta.c
+    
+    # Post-symetrization with the AND/OR rules
+    Theta.and[[t]] <- sign(Theta.c) * pmin(abs(Theta.c),t(abs(Theta.c)))
+    Theta.or[[t]] <- pmax(Theta.c,t(Theta.c)) - pmax(-Theta.c,-t(Theta.c))
+    diag(Theta.or[[t]]) <- diag(Theta.or[[t]])/2
+  }
+  BIC <- -2*loglik + total.df * log(n)
+  
+  if (options$symmetrization=="AND") {
+    Theta <- Theta.and
+  } else Theta <- Theta.or
+  
+  # Get the number of edges inferred
+  n.edges <- sapply(Theta,nb.edges)
+  partial.cor <- list()
+  for (indt in 1:length(Theta)) {
+    partial.cor[[indt]] <- - sweep(sweep(Theta[[indt]], 1,
+                                         sqrt(diag(Theta[[indt]])), "/"), 2,
+                                   sqrt(diag(Theta[[indt]])), "/")
+    diag(partial.cor[[indt]]) <- 1
+  }
+	
 	return(list(Theta=Theta, partial.cor=partial.cor, Beta=Beta, n.edges=n.edges,
               loglik=loglik, loglik.pen=loglik.pen, BIC=BIC, AIC=AIC))
 }

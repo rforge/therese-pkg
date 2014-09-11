@@ -1,3 +1,6 @@
+## imports
+import(igraph)
+
 ## exports
 # standard functions
 export(set.options)

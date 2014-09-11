@@ -1,3 +1,7 @@
+therese - v0.3
+  speed up the code in infer_edges by removing unecessary loop
+  corrected penalized log-likelihood when consensus is fixed
+
 therese - v0.2
   An improved version of therese package that allows the use of a fixed 
 knowledge. Bibliographic prior knowledge can be included in the inferrence 
